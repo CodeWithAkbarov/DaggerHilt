@@ -5,18 +5,28 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import iqro.mobile.randomnumbermvvm.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
+import javax.inject.Named
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel :RandomNumberViewModel by viewModels()
 
+    @Inject
+    @Named("test2")
+    lateinit var testString: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.randomNumberTv.text = testString
 
         lifecycleScope.launchWhenCreated {
             viewModel.flow.collectLatest { response->
